@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOCKS Connection Monitor - Web App</title>
+    <style>
+        /* Windows 7 Aesthetic CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #ecf0f1;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Window Frame */
+        .win7-window {
+            background: linear-gradient(180deg, #f5f5f5 0%, #ebebeb 100%);
+            border: 1px solid #a8a8a8;
+            border-right-color: #dfdfdf;
+            border-bottom-color: #dfdfdf;
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.8), inset -1px -1px 0 rgba(0,0,0,0.1);
+        }
+
+        /* Title Bar */
+        .titlebar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 30px;
+            background: linear-gradient(90deg, #0078d4 0%, #1aa0f7 100%);
+            color: white;
+            padding: 0 4px;
+            border-bottom: 1px solid #0a3d6d;
+            font-weight: bold;
+            font-size: 13px;
+            user-select: none;
+        }
+
+        .titlebar-text {
+            flex: 1;
+            padding: 0 8px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* Content */
+        .panel {
+            padding: 16px;
+            background: #f0f0f0;
+            border: 1px solid #dfdfdf;
+            border-left: 1px solid #ffffff;
+            border-top: 1px solid #ffffff;
+            min-height: 400px;
+        }
+
+        .status-header {
+            margin: 16px 0 12px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #dfdfdf;
+        }
+
+        .status-header h2 {
+            font-size: 13px;
+            font-weight: bold;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 4px;
+            font-size: 12px;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .status-item:hover {
+            background: rgba(0,120,212,0.05);
+        }
+
+        .status-label {
+            font-weight: bold;
+            color: #333;
+            min-width: 130px;
+        }
+
+        .status-value {
+            flex: 1;
+            text-align: right;
+            color: #333;
+            font-family: 'Lucida Console', monospace;
+            padding: 0 8px;
+        }
+
+        .status-connected {
+            color: #008000;
+            font-weight: bold;
+        }
+
+        .status-disconnected {
+            color: #cc0000;
+            font-weight: bold;
+        }
+
+        .status-meta {
+            display: block;
+            font-size: 10px;
+            color: #666;
+            margin-top: 2px;
+            font-family: Arial, sans-serif;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #dfdfdf;
+            border-bottom: 1px solid #ffffff;
+            margin: 16px 0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin: 16px 0;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 6px 20px;
+            border: 2px solid;
+            border-color: #dfdfdf #808080 #808080 #dfdfdf;
+            background: linear-gradient(180deg, #f0f0f0 0%, #e0e0e0 100%);
+            color: #000;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 0;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: linear-gradient(180deg, #f8f8f8 0%, #e8e8e8 100%);
+        }
+
+        .btn:active {
+            border-color: #808080 #dfdfdf #dfdfdf #808080;
+            background: linear-gradient(180deg, #e8e8e8 0%, #f0f0f0 100%);
+        }
+
+        .statusbar {
+            height: 24px;
+            padding: 3px 8px;
+            background: linear-gradient(180deg, #f5f5f5 0%, #e0e0e0 100%);
+            border-top: 1px solid #ffffff;
+            font-size: 11px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            border-top: 1px solid #dfdfdf;
+        }
+
+        .message {
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-size: 12px;
+            border-radius: 0;
+            border: 1px solid #dfdfdf;
+            display: none;
+        }
+
+        .message.info {
+            display: block;
+            background: #fffff0;
+            border-color: #dfb927;
+            color: #333;
+        }
+
+        .message.error {
+            display: block;
+            background: #f8f0f0;
+            border-color: #cc0000;
+            color: #cc0000;
+        }
+
+        .spinner {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .dns-list {
+            list-style: none;
+        }
+
+        .dns-list li {
+            padding: 4px 0;
+            font-family: 'Lucida Console', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="win7-window">
+            <!-- Title Bar -->
+            <div class="titlebar">
+                <div class="titlebar-text">SOCKS Connection Monitor - Web App</div>
+            </div>
+
+            <!-- Content Panel -->
+            <div class="panel">
+                <div id="message" class="message"></div>
+
+                <div class="button-group">
+                    <button id="refresh-btn" class="btn">🔄 Refresh Now</button>
+                </div>
+
+                <!-- Status Section -->
+                <div class="status-header">
+                    <h2>Connection Status</h2>
+                </div>
+
+                <div class="status-item">
+                    <div class="status-label">VPN Status:</div>
+                    <div class="status-value">
+                        <span id="vpn-status" class="status-disconnected">● Not Connected</span>
+                    </div>
+                </div>
+
+                <div class="status-item">
+                    <div class="status-label">SOCKS Proxy:</div>
+                    <div class="status-value">
+                        <span id="proxy-status" class="status-disconnected">● Disconnected</span>
+                    </div>
+                </div>
+
+                <div class="status-item">
+                    <div class="status-label">Proxy Address:</div>
+                    <div class="status-value">
+                        <span id="proxy-address">localhost:1080</span>
+                    </div>
+                </div>
+
+                <div class="status-item">
+                    <div class="status-label">Connection Type:</div>
+                    <div class="status-value">
+                        <span id="connection-type">Direct</span>
+                    </div>
+                </div>
+
+                <hr class="divider">
+
+                <!-- IP Section -->
+                <div class="status-header">
+                    <h2>Public IP Addresses</h2>
+                </div>
+
+                <div class="status-item">
+                    <div class="status-label">Direct IP:</div>
+                    <div class="status-value">
+                        <span id="ip-direct">Loading...</span>
+                        <span class="status-meta" id="ip-direct-latency"></span>
+                    </div>
+                </div>
+
+                <div class="status-item">
+                    <div class="status-label">Via Proxy IP:</div>
+                    <div class="status-value">
+                        <span id="ip-proxy">—</span>
+                        <span class="status-meta" id="ip-proxy-latency"></span>
+                    </div>
+                </div>
+
+                <hr class="divider">
+
+                <!-- DNS Section -->
+                <div class="status-header">
+                    <h2>DNS Servers</h2>
+                </div>
+
+                <div class="status-item">
+                    <div class="status-value">
+                        <ul id="dns-servers" class="dns-list">
+                            <li>Loading...</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Bar -->
+            <div class="statusbar">
+                <span id="last-update">Last update: never</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+        let autoRefreshTimer = null;
+
+        function formatTime(timestamp) {
+            if (!timestamp) return 'never';
+            const date = new Date(timestamp * 1000);
+            return date.toLocaleTimeString();
+        }
+
+        function showMessage(text, type) {
+            const msgEl = document.getElementById('message');
+            msgEl.textContent = text;
+            msgEl.className = `message ${type}`;
+            if (type === 'info') {
+                setTimeout(() => msgEl.className = 'message', 3000);
+            }
+        }
+
+        async function fetchStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/status`);
+                if (!response.ok) throw new Error(`API error: ${response.status}`);
+
+                const status = await response.json();
+                displayStatus(status);
+                showMessage('Status updated', 'info');
+            } catch (error) {
+                console.error('Fetch error:', error);
+                showMessage(`Error: Could not connect to backend (${error.message})`, 'error');
+            }
+        }
+
+        function displayStatus(status) {
+            if (!status) return;
+
+            // VPN status
+            const vpnDetected = status.vpn?.detected;
+            const vpnElement = document.getElementById('vpn-status');
+            if (vpnDetected) {
+                vpnElement.textContent = `● ${status.vpn.name}`;
+                vpnElement.className = 'status-connected';
+                vpnElement.style.color = status.vpn.color || '#008000';
+            } else {
+                vpnElement.textContent = '● Not Connected';
+                vpnElement.className = 'status-disconnected';
+            }
+
+            // Proxy status
+            const proxyAvailable = status.proxy?.available;
+            const proxyElement = document.getElementById('proxy-status');
+            if (proxyAvailable) {
+                proxyElement.textContent = '● Connected';
+                proxyElement.className = 'status-connected';
+            } else {
+                proxyElement.textContent = '● Disconnected';
+                proxyElement.className = 'status-disconnected';
+            }
+
+            // Proxy address
+            document.getElementById('proxy-address').textContent = 
+                `${status.proxy?.host}:${status.proxy?.port}`;
+
+            // Connection type
+            document.getElementById('connection-type').textContent = 
+                status.connection_type || 'Direct';
+
+            // Direct IP
+            const directIP = status.ip?.direct;
+            if (directIP?.success) {
+                document.getElementById('ip-direct').textContent = directIP.ip;
+                document.getElementById('ip-direct-latency').textContent = 
+                    `(${directIP.latency}ms)`;
+            } else {
+                document.getElementById('ip-direct').textContent = 'Error';
+                document.getElementById('ip-direct-latency').textContent = '';
+            }
+
+            // Proxy IP
+            const proxyIP = status.ip?.via_proxy;
+            if (proxyIP && proxyIP.success) {
+                document.getElementById('ip-proxy').textContent = proxyIP.ip;
+                document.getElementById('ip-proxy-latency').textContent = 
+                    `(${proxyIP.latency}ms)`;
+            } else if (proxyAvailable) {
+                document.getElementById('ip-proxy').textContent = 'N/A';
+                document.getElementById('ip-proxy-latency').textContent = '';
+            } else {
+                document.getElementById('ip-proxy').textContent = '—';
+                document.getElementById('ip-proxy-latency').textContent = '';
+            }
+
+            // DNS servers
+            const dnsServers = status.dns || [];
+            const dnsList = document.getElementById('dns-servers');
+            if (dnsServers.length > 0) {
+                dnsList.innerHTML = dnsServers
+                    .map(dns => `<li>${dns}</li>`)
+                    .join('');
+            } else {
+                dnsList.innerHTML = '<li>No DNS servers found</li>';
+            }
+
+            // Last update
+            document.getElementById('last-update').textContent = 
+                `Last update: ${formatTime(status.timestamp)}`;
+        }
+
+        // Event listeners
+        document.getElementById('refresh-btn').addEventListener('click', fetchStatus);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchStatus();
+            // Auto-refresh every 5 seconds
+            autoRefreshTimer = setInterval(fetchStatus, 5000);
+        });
+
+        // Cleanup
+        window.addEventListener('beforeunload', () => {
+            if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+        });
+    </script>
+</body>
+</html>

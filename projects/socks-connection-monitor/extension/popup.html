@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SOCKS Connection Monitor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="win7-window">
+        <!-- Title Bar -->
+        <div class="titlebar">
+            <div class="titlebar-text">SOCKS Connection Monitor</div>
+            <div class="titlebar-controls">
+                <button class="titlebar-button" id="minimize">_</button>
+                <button class="titlebar-button" id="close">✕</button>
+            </div>
+        </div>
+
+        <!-- Status Bar Section -->
+        <div class="panel">
+            <div class="status-header">
+                <h3>Connection Status</h3>
+                <button id="refresh-btn" class="btn-refresh" title="Refresh Now">🔄</button>
+            </div>
+
+            <div class="status-item">
+                <div class="status-label">VPN Status:</div>
+                <div class="status-value">
+                    <span id="vpn-status" class="status-disconnected">● Not Connected</span>
+                </div>
+            </div>
+
+            <div class="status-item">
+                <div class="status-label">SOCKS Proxy:</div>
+                <div class="status-value">
+                    <span id="proxy-status" class="status-disconnected">● Disconnected</span>
+                </div>
+            </div>
+
+            <div class="status-item">
+                <div class="status-label">Proxy Address:</div>
+                <div class="status-value">
+                    <span id="proxy-address">localhost:1080</span>
+                </div>
+            </div>
+
+            <div class="status-item">
+                <div class="status-label">Connection Type:</div>
+                <div class="status-value">
+                    <span id="connection-type">Direct</span>
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <div class="status-header">
+                <h3>Your IP Address</h3>
+            </div>
+
+            <div class="status-item">
+                <div class="status-label">Direct IP:</div>
+                <div class="status-value">
+                    <span id="ip-direct">Loading...</span>
+                    <span class="status-meta" id="ip-direct-latency"></span>
+                </div>
+            </div>
+
+            <div class="status-item">
+                <div class="status-label">Via Proxy IP:</div>
+                <div class="status-value">
+                    <span id="ip-proxy">—</span>
+                    <span class="status-meta" id="ip-proxy-latency"></span>
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <div class="status-header">
+                <h3>DNS Servers</h3>
+            </div>
+
+            <div class="status-item">
+                <div class="status-value" id="dns-servers">
+                    Loading...
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <!-- Settings Section -->
+            <div class="status-header">
+                <h3>Settings</h3>
+            </div>
+
+            <div class="form-group">
+                <label for="socks-host">SOCKS Host:</label>
+                <input type="text" id="socks-host" class="textbox" value="localhost">
+            </div>
+
+            <div class="form-group">
+                <label for="socks-port">SOCKS Port:</label>
+                <input type="number" id="socks-port" class="textbox" value="1080">
+            </div>
+
+            <div class="form-group">
+                <label for="check-interval">Check Interval (sec):</label>
+                <input type="number" id="check-interval" class="textbox" value="5" min="1" max="60">
+            </div>
+
+            <div class="button-group">
+                <button id="save-btn" class="btn btn-primary">Save Settings</button>
+                <button id="cancel-btn" class="btn btn-secondary">Cancel</button>
+                <button id="settings-btn" class="btn btn-secondary">⚙️ Settings</button>
+            </div>
+
+            <div id="message" class="message"></div>
+        </div>
+
+        <!-- Status Bar Footer -->
+        <div class="statusbar">
+            <span id="last-update">Last update: never</span>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

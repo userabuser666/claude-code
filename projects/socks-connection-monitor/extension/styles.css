@@ -1,0 +1,325 @@
+/* Windows 7 Aesthetic CSS */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #ecf0f1;
+    width: 450px;
+    user-select: none;
+}
+
+/* Main Window Frame */
+.win7-window {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: linear-gradient(180deg, #f5f5f5 0%, #ebebeb 100%);
+    border: 1px solid #a8a8a8;
+    border-right-color: #dfdfdf;
+    border-bottom-color: #dfdfdf;
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.8), inset -1px -1px 0 rgba(0,0,0,0.1);
+}
+
+/* Title Bar - Classic Windows 7 Blue */
+.titlebar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 30px;
+    background: linear-gradient(90deg, #0078d4 0%, #1aa0f7 100%);
+    color: white;
+    padding: 0 4px;
+    border-bottom: 1px solid #0a3d6d;
+    font-weight: bold;
+    font-size: 12px;
+    user-select: none;
+}
+
+.titlebar-text {
+    flex: 1;
+    padding: 0 8px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.titlebar-controls {
+    display: flex;
+    gap: 4px;
+}
+
+.titlebar-button {
+    width: 24px;
+    height: 22px;
+    border: 1px solid #0a3d6d;
+    background: linear-gradient(180deg, #1aa0f7, #0078d4);
+    color: white;
+    font-size: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.titlebar-button:hover {
+    background: linear-gradient(180deg, #2ab0f7, #0088e4);
+}
+
+.titlebar-button:active {
+    background: linear-gradient(180deg, #0088e4, #0078d4);
+}
+
+/* Panels and Content */
+.panel {
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
+    background: #f0f0f0;
+    border: 1px solid #dfdfdf;
+    border-left: 1px solid #ffffff;
+    border-top: 1px solid #ffffff;
+}
+
+.panel::-webkit-scrollbar {
+    width: 16px;
+}
+
+.panel::-webkit-scrollbar-track {
+    background: #f0f0f0;
+}
+
+.panel::-webkit-scrollbar-thumb {
+    background: #c0c0c0;
+    border: 1px solid #808080;
+}
+
+.panel::-webkit-scrollbar-thumb:hover {
+    background: #dfdfdf;
+}
+
+.status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 12px 0 8px 0;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #dfdfdf;
+}
+
+.status-header h3 {
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-refresh {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 1px solid #a0a0a0;
+    background: linear-gradient(180deg, #f0f0f0, #e0e0e0);
+    cursor: pointer;
+    font-size: 12px;
+    border-radius: 2px;
+}
+
+.btn-refresh:hover {
+    background: linear-gradient(180deg, #f8f8f8, #e8e8e8);
+}
+
+.btn-refresh:active {
+    background: linear-gradient(180deg, #e0e0e0, #f0f0f0);
+}
+
+/* Status Items */
+.status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 4px;
+    font-size: 12px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.status-item:hover {
+    background: rgba(0,120,212,0.05);
+}
+
+.status-label {
+    font-weight: bold;
+    color: #333;
+    min-width: 110px;
+}
+
+.status-value {
+    flex: 1;
+    text-align: right;
+    color: #333;
+    font-family: 'Lucida Console', monospace;
+    padding: 0 8px;
+}
+
+.status-connected {
+    color: #008000;
+    font-weight: bold;
+}
+
+.status-disconnected {
+    color: #cc0000;
+    font-weight: bold;
+}
+
+.status-meta {
+    display: block;
+    font-size: 10px;
+    color: #666;
+    margin-top: 2px;
+    font-family: Arial, sans-serif;
+}
+
+/* Divider */
+.divider {
+    border: none;
+    border-top: 1px solid #dfdfdf;
+    border-bottom: 1px solid #ffffff;
+    margin: 12px 0;
+}
+
+/* Forms */
+.form-group {
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.form-group label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+}
+
+.textbox {
+    padding: 4px 4px;
+    border: 2px solid;
+    border-color: #dfdfdf #808080 #808080 #dfdfdf;
+    background: white;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 12px;
+    outline: none;
+}
+
+.textbox:focus {
+    border-color: #0078d4;
+    background: #fffff0;
+}
+
+/* Buttons */
+.button-group {
+    display: flex;
+    gap: 8px;
+    margin: 12px 0;
+    justify-content: flex-end;
+}
+
+.btn {
+    padding: 6px 16px;
+    border: 2px solid;
+    border-color: #dfdfdf #808080 #808080 #dfdfdf;
+    background: linear-gradient(180deg, #f0f0f0 0%, #e0e0e0 100%);
+    color: #000;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 0;
+    min-width: 75px;
+    text-align: center;
+}
+
+.btn:hover {
+    background: linear-gradient(180deg, #f8f8f8 0%, #e8e8e8 100%);
+}
+
+.btn:active {
+    border-color: #808080 #dfdfdf #dfdfdf #808080;
+    background: linear-gradient(180deg, #e8e8e8 0%, #f0f0f0 100%);
+}
+
+.btn-primary {
+    background: linear-gradient(180deg, #e0e0e0 0%, #d0d0d0 100%);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(180deg, #e8e8e8 0%, #d8d8d8 100%);
+}
+
+.btn-secondary {
+    background: linear-gradient(180deg, #f0f0f0 0%, #e0e0e0 100%);
+}
+
+/* Message */
+.message {
+    padding: 8px;
+    margin: 8px 0 0 0;
+    font-size: 12px;
+    border-radius: 2px;
+    display: none;
+    border: 1px solid #dfdfdf;
+    background: #fffff0;
+}
+
+.message.success {
+    display: block;
+    background: #f0f8f0;
+    border-color: #008000;
+    color: #008000;
+}
+
+.message.error {
+    display: block;
+    background: #f8f0f0;
+    border-color: #cc0000;
+    color: #cc0000;
+}
+
+/* Status Bar Footer */
+.statusbar {
+    height: 24px;
+    padding: 3px 4px;
+    background: linear-gradient(180deg, #f5f5f5 0%, #e0e0e0 100%);
+    border-top: 1px solid #ffffff;
+    border-top-color: #ffffff;
+    font-size: 11px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #dfdfdf;
+}
+
+#last-update {
+    margin-left: auto;
+}
+
+/* Scrollbar styling for Windows 7 look */
+::-webkit-scrollbar-corner {
+    background: #f0f0f0;
+}
+
+/* Loading animation */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+.loading {
+    animation: pulse 1.5s ease-in-out infinite;
+}

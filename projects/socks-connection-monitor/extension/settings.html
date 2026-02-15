@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Settings - SOCKS Connection Monitor</title>
+    <link rel="stylesheet" href="settings.css">
+</head>
+<body>
+    <div class="win7-window">
+        <!-- Title Bar -->
+        <div class="titlebar">
+            <div class="titlebar-text">Settings - SOCKS Connection Monitor</div>
+            <div class="titlebar-controls">
+                <button class="titlebar-button" id="close">✕</button>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab-button active" data-tab="appearance">Appearance</button>
+                <button class="tab-button" data-tab="proxies">SOCKS Proxies</button>
+                <button class="tab-button" data-tab="colors">Color Theme</button>
+                <button class="tab-button" data-tab="general">General</button>
+            </div>
+        </div>
+
+        <!-- Content Panel -->
+        <div class="panel">
+
+            <!-- APPEARANCE TAB -->
+            <div id="appearance-tab" class="tab-content active">
+                <div class="section-header">
+                    <h3>Appearance Settings</h3>
+                </div>
+
+                <div class="setting-group">
+                    <label>Window Opacity / Transparency</label>
+                    <div class="slider-container">
+                        <input type="range" id="opacity-slider" min="50" max="100" value="100" class="slider">
+                        <span id="opacity-value" class="value-display">100%</span>
+                    </div>
+                    <p class="help-text">Adjust how transparent the window is (50-100%)</p>
+                </div>
+
+                <hr class="divider">
+
+                <div class="setting-group">
+                    <label>Font Size</label>
+                    <select id="font-size" class="dropdown">
+                        <option value="12">Small (12px)</option>
+                        <option value="13" selected>Normal (13px)</option>
+                        <option value="14">Large (14px)</option>
+                        <option value="15">Extra Large (15px)</option>
+                    </select>
+                </div>
+
+                <hr class="divider">
+
+                <div class="setting-group">
+                    <label>Popup Size</label>
+                    <select id="popup-size" class="dropdown">
+                        <option value="compact">Compact (400px)</option>
+                        <option value="normal" selected>Normal (450px)</option>
+                        <option value="expanded">Expanded (550px)</option>
+                        <option value="large">Large (650px)</option>
+                    </select>
+                </div>
+
+                <hr class="divider">
+
+                <div class="setting-group checkbox">
+                    <input type="checkbox" id="show-tooltips" checked>
+                    <label for="show-tooltips">Show Tooltips on Hover</label>
+                </div>
+
+                <div class="setting-group checkbox">
+                    <input type="checkbox" id="animations-enabled" checked>
+                    <label for="animations-enabled">Enable Smooth Animations</label>
+                </div>
+            </div>
+
+            <!-- PROXIES TAB -->
+            <div id="proxies-tab" class="tab-content">
+                <div class="section-header">
+                    <h3>SOCKS5 Proxy Manager</h3>
+                    <button id="import-proxies-btn" class="btn btn-small">📥 Import</button>
+                </div>
+
+                <div class="import-section" id="import-section" style="display: none;">
+                    <div class="section-header">
+                        <h4>Import Proxies</h4>
+                    </div>
+
+                    <div class="setting-group">
+                        <label>Import Format:</label>
+                        <div class="button-group">
+                            <button class="import-format-btn active" data-format="iproxyal">iProxyal</button>
+                            <button class="import-format-btn" data-format="json">JSON</button>
+                            <button class="import-format-btn" data-format="csv">CSV</button>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <label>Paste your proxy list:</label>
+                        <textarea id="proxy-paste-area" placeholder="host:port&#10;or&#10;host:port:username:password&#10;or JSON/CSV format"></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="import-confirm-btn" class="btn btn-primary">✓ Import</button>
+                        <button id="import-cancel-btn" class="btn btn-secondary">✕ Cancel</button>
+                    </div>
+
+                    <div id="import-message" class="message"></div>
+                </div>
+
+                <div class="proxy-list">
+                    <div class="proxy-list-header">
+                        <span>Proxy Name</span>
+                        <span>Address</span>
+                        <span>Status</span>
+                        <span>Actions</span>
+                    </div>
+                    <div id="proxies-container" class="proxies-container">
+                        <div class="proxy-item-empty">No proxies configured. Click "Import" to add proxies.</div>
+                    </div>
+                </div>
+
+                <hr class="divider">
+
+                <div class="button-group">
+                    <button id="add-single-proxy-btn" class="btn btn-primary">➕ Add Single Proxy</button>
+                    <button id="export-proxies-btn" class="btn btn-secondary">📤 Export as iProxyal</button>
+                </div>
+
+                <div id="single-proxy-form" class="single-proxy-form" style="display: none;">
+                    <div class="section-header"><h4>Add Proxy</h4></div>
+                    <input type="text" id="proxy-host" placeholder="Host" class="textbox">
+                    <input type="number" id="proxy-port" placeholder="Port" class="textbox">
+                    <input type="text" id="proxy-name" placeholder="Name (optional)" class="textbox">
+                    <input type="text" id="proxy-username" placeholder="Username (optional)" class="textbox">
+                    <input type="password" id="proxy-password" placeholder="Password (optional)" class="textbox">
+                    <div class="button-group">
+                        <button id="add-proxy-confirm-btn" class="btn btn-primary">Add</button>
+                        <button id="add-proxy-cancel-btn" class="btn btn-secondary">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COLOR THEME TAB -->
+            <div id="colors-tab" class="tab-content">
+                <div class="section-header">
+                    <h3>Connection Type Colors</h3>
+                </div>
+
+                <p class="help-text">Customize the colors for each connection type. These appear in the status indicator.</p>
+
+                <div class="color-settings">
+                    <div class="color-item">
+                        <label>Direct Connection</label>
+                        <input type="color" id="color-direct" class="color-picker">
+                        <span class="color-value" id="color-direct-value">#666666</span>
+                    </div>
+
+                    <div class="color-item">
+                        <label>SOCKS Proxy</label>
+                        <input type="color" id="color-socks" class="color-picker">
+                        <span class="color-value" id="color-socks-value">#00AA00</span>
+                    </div>
+
+                    <div class="color-item">
+                        <label>ExpressVPN</label>
+                        <input type="color" id="color-expressvpn" class="color-picker">
+                        <span class="color-value" id="color-expressvpn-value">#FF6B35</span>
+                    </div>
+
+                    <div class="color-item">
+                        <label>NordVPN</label>
+                        <input type="color" id="color-nordvpn" class="color-picker">
+                        <span class="color-value" id="color-nordvpn-value">#4169E1</span>
+                    </div>
+
+                    <div class="color-item">
+                        <label>Other VPN</label>
+                        <input type="color" id="color-other-vpn" class="color-picker">
+                        <span class="color-value" id="color-other-vpn-value">#9932CC</span>
+                    </div>
+
+                    <div class="color-item">
+                        <label>Disconnected</label>
+                        <input type="color" id="color-disconnected" class="color-picker">
+                        <span class="color-value" id="color-disconnected-value">#DD0000</span>
+                    </div>
+                </div>
+
+                <hr class="divider">
+
+                <div class="button-group">
+                    <button id="reset-colors-btn" class="btn btn-secondary">↻ Reset to Default</button>
+                </div>
+            </div>
+
+            <!-- GENERAL TAB -->
+            <div id="general-tab" class="tab-content">
+                <div class="section-header">
+                    <h3>General Settings</h3>
+                </div>
+
+                <div class="setting-group">
+                    <label>Check Interval (seconds)</label>
+                    <div class="slider-container">
+                        <input type="range" id="check-interval-slider" min="1" max="60" value="5" class="slider">
+                        <span id="check-interval-value" class="value-display">5s</span>
+                    </div>
+                    <p class="help-text">How often to update connection status (1-60 seconds)</p>
+                </div>
+
+                <hr class="divider">
+
+                <div class="setting-group">
+                    <label>Connection Timeout (seconds)</label>
+                    <input type="number" id="timeout-input" class="textbox" value="5" min="1" max="30">
+                    <p class="help-text">Maximum time to wait for connection checks</p>
+                </div>
+
+                <hr class="divider">
+
+                <div class="setting-group checkbox">
+                    <input type="checkbox" id="auto-refresh" checked>
+                    <label for="auto-refresh">Auto-refresh Status</label>
+                </div>
+
+                <div class="setting-group checkbox">
+                    <input type="checkbox" id="show-notifications" checked>
+                    <label for="show-notifications">Show Connection Change Notifications</label>
+                </div>
+
+                <div class="setting-group checkbox">
+                    <input type="checkbox" id="minimize-to-tray" checked>
+                    <label for="minimize-to-tray">Minimize to System Tray</label>
+                </div>
+
+                <hr class="divider">
+
+                <div class="button-group">
+                    <button id="save-all-btn" class="btn btn-primary">💾 Save All Settings</button>
+                    <button id="reset-all-btn" class="btn btn-secondary">↻ Reset to Default</button>
+                </div>
+
+                <div id="settings-message" class="message"></div>
+            </div>
+
+        </div>
+
+        <!-- Status Bar Footer -->
+        <div class="statusbar">
+            <span id="status-text">Ready</span>
+        </div>
+    </div>
+
+    <script src="settings.js"></script>
+</body>
+</html>
